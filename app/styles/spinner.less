@@ -1,0 +1,23 @@
+body {
+
+  #spinner {
+
+    width:74px;
+    height:74px;
+    margin-left: -37px;
+    margin-top: -37px;
+    background-color: #fff;
+    opacity: 0.7;
+    position: absolute;
+    z-index: 10000;
+    left: 50%;
+    top: 50%;
+    display: none;
+    text-align: center;
+  }
+  &.loading {
+    #spinner {
+      display: block;
+    }
+  }
+}

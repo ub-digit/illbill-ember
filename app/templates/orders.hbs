@@ -1,0 +1,129 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>Registrera fjärr ut för fakturering</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form class="form-inline pull-right">
+      <div class="form-group form-inline">
+        <label>Registrera ny order:</label>
+        <div class="input-group">
+          {{input value=request_id class='form-control' placeholder='Streckkod/LF-nummer'}}
+          <div class="input-group-btn">
+            <button {{action 'fetchOrder' request_id}} {{bind-attr class=":btn :btn-primary isRequestIdValid:enabled:disabled"}} type="submit">Hämta</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{#each importData.ill_requests as |order|}}
+  <div class="row order-preview">
+    <div class="col-md-5 col-md-offset-2">
+      <dl class="dl-horizontal">
+        <dt>Beställningsnr:</dt>
+        <dd>{{order.lf_number}}</dd>
+        <dt>Titel:</dt>
+        <dd>{{order.title}}</dd>
+        <dt>Typ:</dt>
+        <dd>{{order.media_type}}</dd>
+        <dt>Från:</dt>
+        <dd>{{order.receiving_library.name}}</dd>
+      </dl>
+    </div>
+    <div class="col-md-3">
+      <form class="form-inline">
+        <div class="form-group">
+          {{view "select"
+          content=prices
+          ptionValuePath="content.value"
+          optionLabelPath="content.label"
+          selection=selectedPrice
+          class="form-control"}}
+          <button {{action 'createOrder'}} class="btn btn-primary">Registrera</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{{/each}}
+
+<div class="row">
+  <div class="col-md-4">
+    <form>
+      <div class="form-group">
+        {{view "select"
+        content=statuses
+        optionValuePath="content.value"
+        optionLabelPath="content.label"
+        value=status
+        class="form-control"}}
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Beställningsnr</th>
+          <th>Mottagande biblitek</th>
+          <th>Kod</th>
+          <th>Hanterad</th>
+          <th>Pris</th>
+          <th>Markera som hanterad</th>
+          <th>Ta bort</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each model as |order|}}
+        <tr>
+          <td>{{input type="checkbox" checked=order.isChecked}}</td>
+          <td>{{order.lf_number}}</td>
+          <td>{{order.receiving_library_name}}</td>
+          <td>{{order.receiving_library_code}}</td>
+          <td>
+            {{#if order.invoiced}}
+              <i class="fa fa-check text-success"></i>
+            {{/if}}
+          </td>
+          <td>{{order.price}} SEK</td>
+          <td><button {{action 'markOrderAsDone' order.id}} class="btn btn-xs btn-primary">$</button></td>
+          <td><button {{action 'deleteOrder' order.id}} class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button></td>
+        </tr>
+        {{/each}}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <th>{{summedPrices}} SEK</th>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    <form class="form-inline">
+      <div class="form-group pull-right">
+        <label>
+          <input type="checkbox" checked> Markera valda ordrar som hanterade
+        </label>
+        <a {{bind-attr href="printInvoiceDataUrl" class=":btn :btn-success areAnyOrdersSelected:enabled:disabled"}} target="_blank">Skapa faktureraunderlag</a>
+      </div>
+    </form>
+  </div>
+</div>
