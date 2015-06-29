@@ -97,7 +97,6 @@
           <th></th>
           <th>Beställningsnr</th>
           <th>Mottagande biblitek</th>
-          <th>Kod</th>
           <th>Hanterad</th>
           <th>Pris</th>
           <th>Markera som hanterad</th>
@@ -109,8 +108,7 @@
         <tr>
           <td>{{input type="checkbox" checked=order.isChecked}}</td>
           <td>{{order.lf_number}}</td>
-          <td>{{order.receiving_library_name}}</td>
-          <td>{{order.receiving_library_code}}</td>
+          <td>{{order.receiving_library_name}} ({{order.receiving_library_code}})</td>          
           <td>
             {{#if order.invoiced}}
             <i class="fa fa-check text-success"></i>
@@ -122,7 +120,7 @@
         </tr>
         {{else}}
         <tr>
-          <td colspan="8" class="text-center"><em>Inget att visa</em></td>
+          <td colspan="7" class="text-center"><em>Inget att visa</em></td>
         </tr>
         {{/each}}
       </tbody>
