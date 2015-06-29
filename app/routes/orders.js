@@ -56,34 +56,6 @@ export default Ember.Route.extend({
 
   actions: {
 
-    fetchOrder: function(id) {
-
-      var that = this;
-
-      var p = '50001';
-      if (id.substring(0, p.length) === p) {
-        id = id.substring(id.indexOf(p) + p.length);
-      }
-
-      Ember.$('body').addClass('loading');
-
-      this.store.find('fetchOrder', id).then(
-
-        function(response) {
-
-          Ember.$('body').removeClass('loading');
-
-          that.controllerFor('orders').set('importData', response);
-          that.controllerFor('orders').set('request_id', null);
-          that.controllerFor('orders').set('selectedPrice', null);
-
-        },
-        function(error) {            
-
-        }
-      )
-    },
-
     refreshModel: function() {
 
       this.refresh();

@@ -7,6 +7,8 @@ export default Ember.Controller.extend({
 
   selectedPrice: null,
   selectedStatus: null,
+  errorGeneralMsg: null,
+  markSelectedAsDone: true,
 
   isRequestIdValid: Ember.computed.notEmpty('request_id'),
 
@@ -22,7 +24,7 @@ export default Ember.Controller.extend({
       params += 'ids[]=' + item + '&';
     });
     params = params.slice(0, params.lastIndexOf('&', 0));
-    return ENV.APP.serviceURL + '/orders/invoice_data.html' + params;
+    return ENV.APP.serviceURL + '/orders/invoice_data.pdf' + params;
 
   }),
 
@@ -39,6 +41,8 @@ export default Ember.Controller.extend({
       invoiced: false
     };
 
+    this.resetErrors();
+
     var that = this;
 
     this.store.save('order', o).then(
@@ -46,46 +50,91 @@ export default Ember.Controller.extend({
 
         console.log(response);
         that.send('refreshModel');
-        that.set('importData', null);
+        Ember.$('.order-preview').slideToggle(250, function() {
+          that.set('importData', null);
+        });
 
       },
       function(error) {
 
-        console.log('gick int att spara order');
+        Ember.$('.order-preview').slideToggle(250, function() {
+          that.set('importData', null);
+        });
+        that.setErrors(error.error.msg, error.error.errors);
 
       }
     );
   },
 
+  updateOrder: function(order) {
 
-  // this is just a dummy function
-  updateOrders: function() {
+    var that = this;
 
-    var o1 = {
-      id: 1,
-      lf_number: data.ill_requests[0].lf_number,
-      json: data,
-      price: this.get('selectedPrice.value'),
-      invoiced: false
-    };
+    this.store.save('order', order).then(
+      function(response) {
+        that.send('refreshModel');
+      },
+      function(error) {
 
-    var o2 = {
-      id: 2,
-      lf_number: data.ill_requests[0].lf_number,
-      json: data,
-      price: this.get('selectedPrice.value'),
-      invoiced: false
-    };
 
-    var orders = {1: o1, 2: o2};
+      }
+    )
+  },
+
+  setErrors: function(msg, errors) {
+
+    console.log(errors);
+
+    this.set('errorGeneralMsg', msg);
+
+    if (errors) {
+      this.set('errorSpecificMsg', errors);
+    }
+
+  },
+
+  resetErrors: function() {
+
+    this.set('errorGeneralMsg', null);
+    this.set('errorSpecificMsg', null);
 
   },
 
   actions: {
 
-    createOrder: function() {
+    fetchOrder: function(id) {
 
-      console.log('createOrder');
+      this.resetErrors();
+
+      var that = this;
+
+      var p = '50001';
+      if (id.substring(0, p.length) === p) {
+        id = id.substring(id.indexOf(p) + p.length);
+      }
+
+      Ember.$('body').addClass('loading');
+
+      this.store.find('fetchOrder', id).then(
+
+        function(response) {
+          Ember.$('body').removeClass('loading');
+          that.set('importData', response);
+
+          that.set('request_id', null);
+          that.set('selectedPrice', null);
+        },
+        function(error) {
+
+          Ember.$('body').removeClass('loading');
+          that.setErrors('Hittade ingen order.');
+          that.set('request_id', null);
+
+        }
+      )
+    },
+
+    createOrder: function() {
 
       this.createOrder();
 
@@ -108,21 +157,20 @@ export default Ember.Controller.extend({
       )
     },
 
-    markOrderAsDone: function(id) {
+    printInvoiceData: function() {
 
-      var that = this;
+      if (this.get('markSelectedAsDone')) {
+        var that = this;
 
-      var o = {id: id, invoiced: true};
+        this.get('selectedOrders').forEach(function(order) {
+          Ember.set(order, 'invoiced', true);
+          that.updateOrder(order);
+        });
+      }
 
-      this.store.save('order', o).then(
-        function(response) {
-          that.send('refreshModel');
-        },
-        function(error) {
+      window.open(this.get('printInvoiceDataUrl'));
 
-
-        }
-      )
     }
+
   }
 });

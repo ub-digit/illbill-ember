@@ -20,38 +20,62 @@
   </div>
 </div>
 
-{{#each importData.ill_requests as |order|}}
-  <div class="row order-preview">
-    <div class="col-md-5 col-md-offset-2">
-      <dl class="dl-horizontal">
-        <dt>Beställningsnr:</dt>
-        <dd>{{order.lf_number}}</dd>
-        <dt>Titel:</dt>
-        <dd>{{order.title}}</dd>
-        <dt>Typ:</dt>
-        <dd>{{order.media_type}}</dd>
-        <dt>Från:</dt>
-        <dd>{{order.receiving_library.name}}</dd>
-      </dl>
-    </div>
-    <div class="col-md-3">
-      <form class="form-inline">
-        <div class="form-group">
-          {{view "select"
-          content=prices
-          ptionValuePath="content.value"
-          optionLabelPath="content.label"
-          selection=selectedPrice
-          class="form-control"}}
-          <button {{action 'createOrder'}} class="btn btn-primary">Registrera</button>
-        </div>
-      </form>
+{{#if errorGeneralMsg}}
+<div class="row error-message">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="alert alert-danger" role="alert">{{errorGeneralMsg}}
+      {{#if errorSpecificMsg.lf_number}}
+        <ul>
+          {{#each errorSpecificMsg.lf_number as |msg|}}
+            <li>{{msg}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
     </div>
   </div>
+</div>
+{{/if}}
+
+{{#each importData.ill_requests as |order|}}
+<div class="row order-preview">
+  <div class="col-xs-12">
+    <h3>Importera order</h3>
+  </div>
+  <div class="col-md-6">
+    <h4>1. Är det rätt order?</h4>
+    <dl class="dl-horizontal">
+      <dt>Beställningsnr:</dt>
+      <dd>{{order.lf_number}}</dd>
+      <dt>Titel:</dt>
+      <dd>{{order.title}}</dd>
+      <dt>Typ:</dt>
+      <dd>{{order.media_type}}</dd>
+      <dt>Från:</dt>
+      <dd>{{order.receiving_library.name}}</dd>
+    </dl>
+  </div>
+  <div class="col-md-3">
+    <h4>2. Ange pris</h4>
+    <form>
+      <div class="form-group">
+        {{view "select"
+        content=prices
+        ptionValuePath="content.value"
+        optionLabelPath="content.label"
+        selection=selectedPrice
+        class="form-control"}}
+      </div>
+    </form>
+  </div>
+  <div class="col-md-3">
+    <h4>3. Registera order</h4>
+    <button {{action 'createOrder'}} class="btn btn-primary">Registrera</button>
+  </div>
+</div>
 {{/each}}
 
-<div class="row">
-  <div class="col-md-4">
+<div class="row filter-row">
+  <div class="col-md-4 pull-right">
     <form>
       <div class="form-group">
         {{view "select"
@@ -89,12 +113,16 @@
           <td>{{order.receiving_library_code}}</td>
           <td>
             {{#if order.invoiced}}
-              <i class="fa fa-check text-success"></i>
+            <i class="fa fa-check text-success"></i>
             {{/if}}
           </td>
           <td>{{order.price}} SEK</td>
-          <td><button {{action 'markOrderAsDone' order.id}} class="btn btn-xs btn-primary">$</button></td>
+          <td><button {{action 'markOrderAsDone' order.id}} class="btn btn-xs btn-success"><i class="fa fa-check"></i></button></td>
           <td><button {{action 'deleteOrder' order.id}} class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button></td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="8" class="text-center"><em>Inget att visa</em></td>
         </tr>
         {{/each}}
       </tbody>
@@ -120,9 +148,9 @@
     <form class="form-inline">
       <div class="form-group pull-right">
         <label>
-          <input type="checkbox" checked> Markera valda ordrar som hanterade
+          {{input type="checkbox" checked=markSelectedAsDone}} Markera valda ordrar som hanterade
         </label>
-        <a {{bind-attr href="printInvoiceDataUrl" class=":btn :btn-success areAnyOrdersSelected:enabled:disabled"}} target="_blank">Skapa faktureraunderlag</a>
+        <button {{action 'printInvoiceData'}} {{bind-attr class=":btn :btn-success areAnyOrdersSelected:enabled:disabled"}}>Skapa faktureraunderlag</button>
       </div>
     </form>
   </div>
