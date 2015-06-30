@@ -11,9 +11,9 @@
         <label>Registrera ny order:</label>
         <div class="input-group">
           {{input value=request_id class='form-control' placeholder='Streckkod/LF-nummer'}}
-          <div class="input-group-btn">
-            <button {{action 'fetchOrder' request_id}} {{bind-attr class=":btn :btn-primary isRequestIdValid:enabled:disabled"}} type="submit">Hämta</button>
-          </div>
+          <span class="input-group-btn">
+            <button {{action 'fetchOrder' request_id}} {{bind-attr class=":btn :btn-primary isRequestIdValid::disabled"}} type="submit">Hämta</button>
+          </span>
         </div>
       </div>
     </form>
@@ -108,7 +108,7 @@
         <tr>
           <td>{{input type="checkbox" checked=order.isChecked}}</td>
           <td>{{order.lf_number}}</td>
-          <td>{{order.receiving_library_name}} ({{order.receiving_library_code}})</td>          
+          <td>{{order.receiving_library_name}} ({{order.receiving_library_code}})</td>
           <td>
             {{#if order.invoiced}}
             <i class="fa fa-check text-success"></i>

@@ -78,7 +78,7 @@ export default Ember.Controller.extend({
 
 
       }
-    )
+    );
   },
 
   setErrors: function(msg, errors) {
@@ -131,7 +131,7 @@ export default Ember.Controller.extend({
           that.set('request_id', null);
 
         }
-      )
+      );
     },
 
     createOrder: function() {
@@ -154,7 +154,7 @@ export default Ember.Controller.extend({
 
 
         }
-      )
+      );
     },
 
     printInvoiceData: function() {
