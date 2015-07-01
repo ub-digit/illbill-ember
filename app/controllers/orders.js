@@ -157,6 +157,15 @@ export default Ember.Controller.extend({
       );
     },
 
+    openLibrisOrderCard: function(id) {
+
+      var url = 'http://iller.libris.kb.se/illse/api/illrequests/G/' + id + '?format=pdf';
+
+      window.open(url);
+
+
+    },
+
     printInvoiceData: function() {
 
       if (this.get('markSelectedAsDone')) {
