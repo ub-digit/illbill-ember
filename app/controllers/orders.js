@@ -134,9 +134,11 @@ export default Ember.Controller.extend({
       );
     },
 
-    markOrderAsDone: function(order) {
+    toggleDone: function(order) {
 
-      Ember.set(order, 'invoiced', true);
+      console.log(order.invoiced);
+      Ember.set(order, 'invoiced', !order.invoiced);      
+      console.log(order.invoiced);
       this.updateOrder(order);
 
     },

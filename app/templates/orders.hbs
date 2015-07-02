@@ -97,10 +97,9 @@
           <th></th>
           <th>Beställningsnr</th>
           <th>Mottagande biblitek</th>
-          <th>Hanterad</th>
           <th>Pris</th>
           <th>Libris orderkort</th>
-          <th>Markera som hanterad</th>
+          <th>Hanterad</th>
           <th>Ta bort</th>
         </tr>
       </thead>
@@ -110,14 +109,17 @@
           <td>{{input type="checkbox" checked=order.isChecked}}</td>
           <td>{{order.lf_number}}</td>
           <td>{{order.receiving_library_name}} ({{order.receiving_library_code}})</td>
-          <td>
-            {{#if order.invoiced}}
-            <i class="fa fa-check text-success"></i>
-            {{/if}}
-          </td>
           <td>{{order.price}} SEK</td>
           <td><button {{action 'openLibrisOrderCard' order.lf_number}} class="btn btn-xs btn-link"><i class="fa fa-file-pdf-o"></i></button></td>
-          <td><button {{action 'markOrderAsDone' order}} {{bind-attr class=":btn :btn-xs :btn-success order.invoiced:disabled:"}}><i class="fa fa-check"></i></button></td>
+          <td>
+            <button {{action 'toggleDone' order}} {{bind-attr class=":btn :btn-xs :btn-link"}}>
+            {{#if order.invoiced}}
+              <i class="fa fa-toggle-on fa-2x"></i>
+            {{else}}
+              <i class="fa fa-toggle-off fa-2x"></i>
+            {{/if}}
+            </button>
+          </td>
           <td><button {{action 'deleteOrder' order.id}} class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button></td>
         </tr>
         {{else}}
@@ -129,8 +131,7 @@
       <tfoot>
         <tr>
           <td></td>
-          <td></td>
-          <td></td>
+          <td></td>          
           <td></td>
           <th>
             {{#if summedPrices}}
