@@ -110,7 +110,7 @@
           <td>{{order.lf_number}}</td>
           <td>{{order.receiving_library_name}} ({{order.receiving_library_code}})</td>
           <td>{{order.price}} SEK</td>
-          <td><button {{action 'openLibrisOrderCard' order.lf_number}} class="btn btn-xs btn-link"><i class="fa fa-file-pdf-o"></i></button></td>
+          <td><button {{action 'openLibrisOrderCard' order.lf_number}} class="btn btn-xs btn-link"><i class="fa fa-file-pdf-o fa-2x"></i></button></td>
           <td>
             <button {{action 'toggleDone' order}} {{bind-attr class=":btn :btn-xs :btn-link"}}>
             {{#if order.invoiced}}
@@ -131,7 +131,7 @@
       <tfoot>
         <tr>
           <td></td>
-          <td></td>          
+          <td></td>
           <td></td>
           <th>
             {{#if summedPrices}}

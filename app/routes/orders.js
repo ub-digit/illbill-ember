@@ -42,7 +42,9 @@ export default Ember.Route.extend({
 
     var p = {};
 
-    if (params.status) p.status = params.status;
+    if (params.status) {
+      p.status = params.status;
+    }
 
     return this.store.find('order', p);
 
