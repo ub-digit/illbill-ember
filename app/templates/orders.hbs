@@ -117,7 +117,7 @@
           </td>
           <td>{{order.price}} SEK</td>
           <td><button {{action 'openLibrisOrderCard' order.lf_number}} class="btn btn-xs btn-link"><i class="fa fa-file-pdf-o"></i></button></td>
-          <td><button {{action 'markOrderAsDone' order.id}} {{bind-attr class=":btn :btn-xs :btn-success order.invoiced:disabled:"}}><i class="fa fa-check"></i></button></td>
+          <td><button {{action 'markOrderAsDone' order}} {{bind-attr class=":btn :btn-xs :btn-success order.invoiced:disabled:"}}><i class="fa fa-check"></i></button></td>
           <td><button {{action 'deleteOrder' order.id}} class="btn btn-xs btn-danger"><i class="fa fa-times"></i></button></td>
         </tr>
         {{else}}
@@ -132,7 +132,11 @@
           <td></td>
           <td></td>
           <td></td>
-          <th>{{summedPrices}} SEK</th>
+          <th>
+            {{#if summedPrices}}
+              {{summedPrices}} SEK
+            {{/if}}
+          </th>
           <td></td>
           <td></td>
           <td></td>
