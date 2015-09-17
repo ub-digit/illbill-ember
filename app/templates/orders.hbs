@@ -75,9 +75,24 @@
 {{/each}}
 
 <div class="row filter-row">
-  <div class="col-md-4 pull-right">
+  <div class="col-md-4 col-md-offset-4">
     <form>
       <div class="form-group">
+        <label>Sigel</label>
+        {{view "select"
+        content=sigels
+        optionValuePath="content"
+        optionLabelPath="content"
+        value=sigel
+        prompt="Alla"
+        class="form-control"}}
+      </div>
+    </form>
+  </div>
+  <div class="col-md-4">
+    <form>
+      <div class="form-group">
+        <label>Status</label>
         {{view "select"
         content=statuses
         optionValuePath="content.value"
@@ -98,6 +113,7 @@
           <th>Beställningsnr</th>
           <th>Mottagande biblitek</th>
           <th>Pris</th>
+          <th>Sigel</th>
           <th>Libris orderkort</th>
           <th>Hanterad</th>
           <th>Ta bort</th>
@@ -110,6 +126,7 @@
           <td>{{order.lf_number}}</td>
           <td>{{order.receiving_library_name}} ({{order.receiving_library_code}})</td>
           <td>{{order.price}} SEK</td>
+          <td>{{order.sigel}}</td>
           <td><button {{action 'openLibrisOrderCard' order.lf_number}} class="btn btn-xs btn-link"><i class="fa fa-file-pdf-o fa-2x"></i></button></td>
           <td>
             <button {{action 'toggleDone' order}} {{bind-attr class=":btn :btn-xs :btn-link"}}>

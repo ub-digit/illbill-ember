@@ -5,6 +5,9 @@ export default Ember.Route.extend({
   queryParams: {
     status: {
       refreshModel: true
+    },
+    sigel: {
+      refreshModel: true
     }
   },
 
@@ -24,7 +27,8 @@ export default Ember.Route.extend({
 
     controller.set('prices', prices);
     controller.set('statuses', statuses);
-    controller.set('model', model);
+    controller.set('model', model.orders);
+    controller.set('sigels', model.sigels);
 
   },
 
@@ -45,8 +49,14 @@ export default Ember.Route.extend({
     if (params.status) {
       p.status = params.status;
     }
+    if (params.sigel) {
+      p.sigel = params.sigel;
+    }
 
-    return this.store.find('order', p);
+    return Ember.RSVP.hash({
+      orders: this.store.find('order', p),
+      sigels: this.store.find('sigel')
+    });
 
   },
 

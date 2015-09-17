@@ -3,12 +3,11 @@ import ENV from '../config/environment';
 
 export default Ember.Controller.extend({
 
-  queryParams: ['status'],
+  queryParams: ['status', 'sigel'],
 
   selectedPrice: null,
-  selectedStatus: null,
   errorGeneralMsg: null,
-  markSelectedAsDone: true,
+  markSelectedAsDone: false,
 
   isRequestIdValid: Ember.computed.notEmpty('request_id'),
 
@@ -137,7 +136,7 @@ export default Ember.Controller.extend({
     toggleDone: function(order) {
 
       console.log(order.invoiced);
-      Ember.set(order, 'invoiced', !order.invoiced);      
+      Ember.set(order, 'invoiced', !order.invoiced);
       console.log(order.invoiced);
       this.updateOrder(order);
 

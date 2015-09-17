@@ -5,6 +5,7 @@ export default Ember.Object.extend({
   endpoints: {
 
     order: {path: 'orders'},
+    sigel: {path: 'sigels'},
     fetchOrder: {path: 'orders/fetchorder', singular: 'order'}
 
   },
