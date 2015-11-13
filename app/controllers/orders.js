@@ -27,6 +27,14 @@ export default Ember.Controller.extend({
 
   }),
 
+
+  observeCheckAll: Ember.observer('checkAll', function() {
+    this.get('model').forEach(function(item) {
+      Ember.set(item, 'isChecked', this.get('checkAll'));
+    }, this);
+  }),
+
+
   areAnyOrdersSelected: Ember.computed.notEmpty('selectedOrderIds'),
 
   createOrder: function() {
@@ -152,17 +160,19 @@ export default Ember.Controller.extend({
 
       var that = this;
 
-      this.store.destroy('order', id).then(
-        function(response) {
+      if (confirm("Vill du ta bort ordern helt?")) {
 
-          that.send('refreshModel');
+        this.store.destroy('order', id).then(
+          function(response) {
 
-        },
-        function(error) {
+            that.send('refreshModel');
 
+          },
+          function(error) {
 
-        }
-      );
+          }
+        );
+      }
     },
 
     openLibrisOrderCard: function(id) {
